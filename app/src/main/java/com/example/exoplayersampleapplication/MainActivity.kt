@@ -36,7 +36,7 @@ class MainActivity : AppCompatActivity() {
         player.setMediaSource(
             ProgressiveMediaSource.Factory(cacheDataSource).createMediaSource(
                 MediaItem.fromUri(
-                    "https://tech-challenge-mobile.s3.eu-central-1.amazonaws.com/0040/0040.mp4"
+                    "http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4"
                 )
             )
         )
