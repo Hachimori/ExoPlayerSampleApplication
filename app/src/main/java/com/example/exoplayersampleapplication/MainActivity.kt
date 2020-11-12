@@ -5,6 +5,8 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory
+import com.google.android.exoplayer2.extractor.ExtractorsFactory
+import com.google.android.exoplayer2.extractor.mp4.Mp4Extractor
 import com.google.android.exoplayer2.source.ExtractorMediaSource
 import com.google.android.exoplayer2.source.MediaSource
 import com.google.android.exoplayer2.upstream.AssetDataSource
@@ -32,9 +34,11 @@ class MainActivity : AppCompatActivity() {
 
         playerView.player = player
 
+        val extractorsFactory: ExtractorsFactory =
+            DefaultExtractorsFactory().setMp4ExtractorFlags(Mp4Extractor.FLAG_WORKAROUND_IGNORE_EDIT_LISTS)
 
         player.setMediaSource(
-            ProgressiveMediaSource.Factory(cacheDataSource).createMediaSource(
+            ProgressiveMediaSource.Factory(cacheDataSource, extractorsFactory).createMediaSource(
                 MediaItem.fromUri(
                     "http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4"
                 )
@@ -55,10 +59,12 @@ class MainActivity : AppCompatActivity() {
             e.printStackTrace()
         }
 
-        val factory: DataSource.Factory = DataSource.Factory { assetDataSource }
+        val dataSourceFactory: DataSource.Factory = DataSource.Factory { assetDataSource }
+        val extractorsFactory: ExtractorsFactory =
+            DefaultExtractorsFactory().setMp4ExtractorFlags(Mp4Extractor.FLAG_WORKAROUND_IGNORE_EDIT_LISTS)
         val source: MediaSource = ExtractorMediaSource(
             assetDataSource.uri!!,
-            factory, DefaultExtractorsFactory(), null, null
+            dataSourceFactory, extractorsFactory, null, null
         )
         player.prepare(source)
 
